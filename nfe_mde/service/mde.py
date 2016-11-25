@@ -21,8 +21,15 @@ import os
 import base64
 import gzip
 import cStringIO
-from pysped.nfe import ProcessadorNFe
 from datetime import datetime
+
+import logging
+_logger = logging.getLogger(__name__)
+
+try:
+    from pysped.nfe import ProcessadorNFe
+except ImportError as exc:
+    logging.exception(exc.message)
 
 
 def __processo(company):
@@ -88,7 +95,7 @@ def distribuicao_nfe(company, ultimo_nsu):
                     doc.NSU.valor +
                     '.xml')
                 arq = open(path, 'w')
-                arq.write(orig_file_cont.encode('utf-8'))
+                arq.write(orig_file_cont)
                 arq.close()
 
                 nfe_list.append({
@@ -176,6 +183,8 @@ def download_nfe(company, list_nfe):
             if nfe.cStat.valor == '140':
 
                 nome_arq = os.path.join(import_folder, 'download_nfe/')
+                if not os.path.exists(nome_arq):
+                    os.makedirs(nome_arq)
                 nome_arq = nome_arq + nfe.chNFe.valor + 'download-nfe.xml'
                 arq = open(nome_arq, 'w')
                 arq.write(nfe.procNFe.valor.encode('utf-8'))
