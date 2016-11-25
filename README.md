@@ -26,5 +26,7 @@ MDF-E | Done
 Importação do XML de compra | In Progress
 NFC-E | In Progress
 CT-E | TODO
+SAT | TODO
+
 
 
